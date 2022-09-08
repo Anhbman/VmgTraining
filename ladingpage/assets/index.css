@@ -1,0 +1,143 @@
+body {
+    margin: 0;
+    line-height: 1.7;
+    color: gray;
+    font-size: 1rem;
+    font-weight: 300;
+    background-image: url("https://preview.colorlib.com/theme/booke/images/xpolygon.png.pagespeed.ic.nHRdkw8Vdv.webp");
+    background-repeat: no-repeat;
+    background-position: -500px -1000px;
+}
+
+a{
+    text-decoration: none;
+    background-color: transparent;
+}
+
+p {
+    margin-top: 0px;
+    margin-bottom: 1rem;
+}
+
+.header-bar {
+    /* background-color: #176cfa; */
+    position: relative;
+    width: 100%;
+    left: 0;
+    height: 68.8px;
+    background-color: #fff;
+}
+
+.header-text {
+    color: #fff;
+}
+
+.header-bar .header-logo {
+    color: #333;
+    font-weight: bold;
+    font-size: 2rem;
+}
+
+.navbar {
+    padding: 0px;
+}
+
+.btn.btn-white {
+    background-color: #fff;
+    border: 2px solid transparent;
+}
+
+.btn {
+    border-radius: 30px;
+    color: #333;
+}
+
+.btn:hover {
+    background-color: #176dfa;
+    border: 2px solid #fff;
+    color: #fff;
+}
+
+.site-logo-book {
+    justify-content: center;
+}
+
+.text2 {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    padding-bottom: 30px;
+    margin-bottom: 30px;
+    color: black;
+    position: relative;
+}
+
+.site-section {
+    padding-top: 72px;
+}
+
+.text2-p {
+    color: #9aa69e;
+}
+
+.text2::after {
+    content: "";
+    position: absolute;
+    width: 50px;
+    height: 2px;
+    background-color: rgb(28, 99, 251);
+    bottom: 0;
+    left: 0;
+}
+
+.service {
+    background-color: #fff;
+    padding: 30px;
+    border-width: 2px 1px 1px;
+    border-style: solid;
+    border-color: rgb(28, 99, 251) rgb(238, 238, 238) rgb(238, 238, 238);
+    border-image: initial;
+    top: 0;
+    position: relative;
+    transition: all 0.3s ease-in-out 0s;
+}
+
+.service:hover {
+    box-shadow: rgb(0 0 0 / 40%) 0px 10px 30px -10px;
+}
+
+.service-heading{
+    color: black;
+}
+
+.service h3 {
+ font-size: 1rem;
+ color: rgb(0, 0, 0);
+ margin-bottom: 8px;
+}
+
+.service-icon {
+    width: 60px;
+    height: 60px;
+    display: block;
+    border: 1px solid rgb(28, 99, 251);
+    border-radius: 50%;
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.service-icon > i {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 30px;
+    color: rgb(28, 99, 251);
+}
+
+.text-book {
+    color: black;
+    padding-bottom: 30px;
+}
+
+.site-section {
+    padding-bottom: 72px;
+}
