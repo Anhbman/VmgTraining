@@ -37,7 +37,7 @@ public class BlogService {
                 .orElseThrow(() -> new IllegalArgumentException("Blog not exits " + id));
         if (blog1 != null) {
             blog1.setTitle(blog.getTitle());
-            blog1.setCover(blog.getCover());
+            blog1.setCovers(blog.getCovers());
             blog1.setContent(blog.getContent());
             return blogRepository.save(blog1);
         }

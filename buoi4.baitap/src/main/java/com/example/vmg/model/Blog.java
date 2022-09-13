@@ -1,13 +1,16 @@
 package com.example.vmg.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import java.util.List;
+import java.util.Set;
 
 @Entity
+@Data
 public class Blog {
 
     @Id
@@ -17,25 +20,42 @@ public class Blog {
     @NotBlank(message = "title is mandatory")
     private String title;
 
-    @NotBlank(message = "cover is mandatory")
-    private String cover;
+//    @NotBlank(message = "cover is mandatory")
+//    private Cover cover;
 
     @NotBlank(message = "content is mandatory")
     private String content;
 
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+    @OneToMany(mappedBy = "blog")
+    private Set<Cover> covers;
+
+    @Transient
+    private List<MultipartFile> files;
+
+
     public Blog(){}
 
-    public Blog(long id, String title, String cover, String content) {
+    public Blog(long id, String title, String content) {
         this.id = id;
         this.title = title;
-        this.cover = cover;
         this.content = content;
     }
 
-    public Blog(String title, String cover, String content) {
+    public Blog(String title, String content) {
         this.title = title;
-        this.cover = cover;
         this.content = content;
+    }
+
+    public List<MultipartFile> getFiles() {
+        return files;
+    }
+
+    public void setFiles(List<MultipartFile> files) {
+        this.files = files;
     }
 
     public long getId() {
@@ -54,19 +74,56 @@ public class Blog {
         this.title = title;
     }
 
-    public String getCover() {
-        return cover;
-    }
-
-    public void setCover(String cover) {
-        this.cover = cover;
-    }
-
     public String getContent() {
         return content;
     }
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public Set<Cover> getCovers() {
+        return covers;
+    }
+
+    public void setCovers(Set<Cover> covers) {
+        this.covers = covers;
+    }
+
+    public Blog(BlogBuilder blogBuilder) {
+        this.title = blogBuilder.title;
+        this.content = blogBuilder.content;
+    }
+
+    public static class BlogBuilder {
+        private final String title;
+        private String content;
+        private Category category;
+
+        public BlogBuilder(String title) {
+            this.title = title;
+        }
+
+        public BlogBuilder content(String content) {
+            this.content = content;
+            return this;
+        }
+
+        public BlogBuilder category(Category category) {
+            this.category = category;
+            return this;
+        }
+
+        public Blog build() {
+            return new Blog(this);
+        }
     }
 }

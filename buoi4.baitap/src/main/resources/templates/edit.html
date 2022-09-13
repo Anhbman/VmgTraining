@@ -26,9 +26,13 @@
       <p style="color: red" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></p>
     </div>
 
+    <select th:field="*{category}">
+      <option th:each="c : ${categories}" th:value="${c.id}" th:text="${c.name}"></option>
+    </select>
+
     <div class="form-group">
       <label>Cover: </label>
-      <input class="form-control" type="text" th:field="*{cover}">
+      <input class="form-control" type="file" th:field="*{cover}">
       <p style="color: red" th:if="${#fields.hasErrors('cover')}" th:errors="*{cover}"></p>
     </div>
 

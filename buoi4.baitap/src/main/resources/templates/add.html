@@ -17,7 +17,7 @@
 <body>
 
 <div class="container">
-  <form th:action="@{/add}" method="post" th:object="${blog}">
+  <form th:action="@{/add}" method="post" th:object="${blog}" enctype="multipart/form-data">
 
     <input type="hidden" th:field="*{id}">
     <div class="form-group">
@@ -26,10 +26,14 @@
       <p style="color: red" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></p>
     </div>
 
+    <select th:field="*{category}">
+      <option th:each="c : ${categories}" th:value="${c.id}" th:text="${c.name}"></option>
+    </select>
+
     <div class="form-group">
       <label>Cover: </label>
-      <input class="form-control" type="text" th:field="*{cover}">
-      <p style="color: red" th:if="${#fields.hasErrors('cover')}" th:errors="*{cover}"></p>
+      <input class="form-control" type="file" multiple="multiple" th:field="*{files}">
+      <p style="color: red" th:if="${#fields.hasErrors('files')}" th:errors="*{files}"></p>
     </div>
 
     <div class="form-group">
