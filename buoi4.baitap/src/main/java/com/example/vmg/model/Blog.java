@@ -1,5 +1,6 @@
 package com.example.vmg.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -10,7 +11,6 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Data
 public class Blog {
 
     @Id
@@ -32,6 +32,10 @@ public class Blog {
 
     @OneToMany(mappedBy = "blog")
     private Set<Cover> covers;
+
+    @ManyToOne
+    @JoinColumn(name = "author_id")
+    private Author author;
 
     @Transient
     private List<MultipartFile> files;
@@ -96,6 +100,14 @@ public class Blog {
 
     public void setCovers(Set<Cover> covers) {
         this.covers = covers;
+    }
+
+    public Author getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(Author author) {
+        this.author = author;
     }
 
     public Blog(BlogBuilder blogBuilder) {

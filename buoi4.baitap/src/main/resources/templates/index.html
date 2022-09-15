@@ -14,11 +14,17 @@
 <body>
 
 <div class="container">
-  <ul class="link-category">
-    <li th:each="c : ${categories}">
-      <a th:href="@{/{id}(id=${c.id})}" th:text="${c.name}"></a>
-    </li>
-  </ul>
+<!--  <ul class="link-category">-->
+<!--    <li th:each="c : ${categories}">-->
+<!--      <a th:href="@{/{id}(id=${c.id})}" th:text="${c.name}"></a>-->
+<!--    </li>-->
+<!--  </ul>-->
+
+  <select class="link-category">
+    <option ></option>
+    <option  th:each="c : ${categories}" th:value="${c.id}" th:text="${c.name}">
+    </option>
+  </select>
   <table class="table mt-4">
     <thead>
       <tr>
@@ -39,7 +45,7 @@
             <span th:text="${blog.getTitle()}"></span>
           </td>
           <td th:each="cover : ${blog.getCovers()}">
-            <img th:src="${'/image/' + cover.getName()}" width="100px"/>
+            <img th:src="${'/image/' + cover.getName()}" width="50px"/>
           </td>
           <td>
             <span th:text="${blog.getContent()}"></span>
@@ -84,8 +90,13 @@
     document.addEventListener("DOMContentLoaded", () => {
         let deleteForm = document.forms["delete-form"];
         let btnDelete = document.getElementById("btn-delete");
+        let selectCategory = document.querySelector('.link-category');
 
         let blogID;
+
+        selectCategory.onchange = function () {
+          window.location.href = `http://localhost:8080/${selectCategory.value}`;
+        }
 
         $('#delete-modal').on('show.bs.modal', function(event) {
             let button =  $(event.relatedTarget);
@@ -107,6 +118,7 @@
                 }
             })
         }
+
     })
 
 </script>

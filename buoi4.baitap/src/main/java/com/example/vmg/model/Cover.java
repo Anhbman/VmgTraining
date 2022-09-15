@@ -1,5 +1,7 @@
 package com.example.vmg.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -13,6 +15,7 @@ public class Cover {
 
     @ManyToOne
     @JoinColumn(name = "blog_id")
+    @JsonIgnore
     private Blog blog;
 
     public Cover() {
@@ -50,30 +53,6 @@ public class Cover {
     public Cover(String name, Blog blog) {
         this.name = name;
         this.blog = blog;
-    }
-
-    public Cover(CoverBuilder coverBuilder) {
-        this.name = coverBuilder.name;
-        this.blog = coverBuilder.blog;
-    }
-
-    public static class CoverBuilder {
-        private final String name;
-
-        private Blog blog;
-
-        public CoverBuilder(String name) {
-            this.name = name;
-        }
-
-        public CoverBuilder blog(Blog blog) {
-            this.blog = blog;
-            return this;
-        }
-
-        public Cover build() {
-            return new Cover(this);
-        }
     }
 
 }

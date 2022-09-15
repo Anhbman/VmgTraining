@@ -17,6 +17,7 @@
 <body>
 
 <div class="container">
+  <a th:href="@{/}">List blog</a>
   <form th:action="@{/add}" method="post" th:object="${blog}" enctype="multipart/form-data">
 
     <input type="hidden" th:field="*{id}">

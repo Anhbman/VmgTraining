@@ -7,10 +7,13 @@ import com.example.vmg.service.CoverService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,6 +34,9 @@ public class BlogController {
 
     @Autowired
     private BlogService blogService;
+
+    @Autowired
+    private MessageSource messageSource;
 
     @Autowired
     private CategoryService categoryService;
@@ -68,9 +74,8 @@ public class BlogController {
     public String add(@Valid @ModelAttribute("blog") BlogForm blogForm,
                       BindingResult result,
                       Model model) {
-        System.out.println("add blog");
-        System.out.println("file: " + blogForm.getFiles().toArray().toString());
 
+        System.out.println("error:" + result.hasErrors());
         if (result.hasErrors()) {
             model.addAttribute("blog", blogForm);
             model.addAttribute("categories", categoryService.getAllCategories());
@@ -79,26 +84,17 @@ public class BlogController {
         Blog blog = new Blog.BlogBuilder(blogForm.getTitle())
                 .content(blogForm.getContent())
                 .build();
-        Category category = categoryService.getCategory(blogForm.getCategory().getId());
+        Category category = blogForm.getCategory();
         blog.setCategory(category);
         blogService.add(blog);
 
-        for (MultipartFile file : blogForm.getFiles()) {
-//            String fileName = file.getOriginalFilename();
-            try {
-                var fileName = file.getOriginalFilename();
-                var is = file.getInputStream();
+        addFile(blogForm.getFiles(),blog);
 
-                Files.copy(is, Paths.get(this.fileUpload + fileName), StandardCopyOption.REPLACE_EXISTING);
-                Cover cover = new Cover(fileName, blog);
-//                FileCopyUtils.copy(file.getName().getBytes(), new File(this.fileUpload + fileName));
-                System.out.println("file: " + fileName);
-//                cover.setBlog(blog);
-                coverService.save(cover);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+//        for (MultipartFile file : blogForm.getFiles()) {
+//            var fileName = file.getOriginalFilename();
+//            Cover cover = new Cover(fileName, blog);
+//            coverService.save(cover);
+//        }
         return "redirect:/";
     }
 
@@ -112,21 +108,48 @@ public class BlogController {
 
     @GetMapping(path = "/{id}/edit")
     public String edit(@PathVariable("id") long id, Model model) {
-        model.addAttribute("blog", blogService.getBlog(id));
+        model.addAttribute("blog", new BlogForm(blogService.getBlog(id)));
         model.addAttribute("categories", categoryService.getAllCategories());
         return "edit";
     }
 
     @PostMapping(path = "/edit")
-    public String edit(@Valid @ModelAttribute("blog") Blog blog,
+    public String edit(@Valid @ModelAttribute("blog") BlogForm blogForm,
                        BindingResult result,
                        Model model) {
-
+        System.out.println("Error: " + result.hasErrors());
         if (result.hasErrors()) {
-            model.addAttribute("blog", blog);
-            return "edit";
+            for (Object object : result.getAllErrors()) {
+                if(object instanceof FieldError) {
+                    FieldError fieldError = (FieldError) object;
+                    String message = messageSource.getMessage(fieldError, null);
+                    System.out.println(message);
+                }
+            }
+            model.addAttribute("blog", blogForm);
+            return "redirect:/" + blogForm.getId() + "/edit";
         }
+
+        System.out.println("edit running");
+        System.out.println();
+        Blog blog = blogService.getBlog(blogForm.getId());
+        coverService.remove(blog);
+        addFile(blogForm.getFiles(), blog);
         blogService.update(blog.getId(), blog);
         return "redirect:/";
+    }
+
+    private void addFile(List<MultipartFile> files, Blog blog) {
+        for (MultipartFile file : files) {
+            try {
+                var fileName = file.getOriginalFilename();
+                var is = file.getInputStream();
+                Files.copy(is, Paths.get(this.fileUpload + fileName), StandardCopyOption.REPLACE_EXISTING);
+                Cover cover = new Cover(fileName, blog);
+                coverService.save(cover);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

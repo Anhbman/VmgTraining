@@ -1,5 +1,7 @@
 package com.example.vmg.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.util.Set;
@@ -14,6 +16,7 @@ public class Category {
     @NotEmpty(message = "Category name is mandatory")
     private String name;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "category")
     private Set<Blog> blogs;
 
