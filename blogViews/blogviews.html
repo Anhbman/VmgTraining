@@ -13,27 +13,36 @@
         $(document).ready(function() {
             $.getJSON('http://localhost:8080/api/blogs', function (json) {
                 // console.log(json[0].category.name);
-                console.log(json);
-               var tr="";
+                console.log("blogd: " + json);
+               let tr="";
                for (let i = 0; i < json.length; i++) {
                 // console.log(json[i].category.name);
                 tr += `<tr>
                     <td>${json[i].id}</td>
                     <td>${json[i].title}</td>
                     <td>${json[i].content}</td>
-                    `;
+                    <td colspan='3'>`;
                     for (let j = 0; j < json[i].covers.length; j++) {
-                        tr += `<td><img width="50px" src='http://127.0.0.1:8080/image/${json[i].covers[j].name}'></td>`;
+                        tr += `<img width="50px" src='http://127.0.0.1:8080/image/${json[i].covers[j].name}'>`;
                     }
-                    tr +=`<td>${json[i].category ? json[i].category.name : ""}</td>
+                    tr +=`</td><td>${json[i].category ? json[i].category.name : ""}</td>
                     <td><button class='edit'>Edit</button> <button class='delete' id='${json[i].id}'>Delete</button></td>
                     </tr>`;
                } 
                $('table').append($(tr));
             });
+
+            $.getJSON('http://localhost:8080/api/categories', function (json) {
+                console.log("Categories" + json);
+                let categories = "";
+                for (let i = 0; i < json.length; i++) {
+                    categories += `<option value="${json[i].id}">${json[i].name}</option>`;
+                }
+                $('select').append($(categories));
+            })
         });
 
-        $(document).delegate('.delete', 'click', function() {
+        $(document).delegate('.delete', 'click', function(event) {
             console.log("Delete running...");
             if (confirm('Do you really want to delete record?')) {
                 var id = $(this).attr('id');
@@ -56,26 +65,57 @@
                 });
             }
         });
+
+        $(document).delegate('#addNew', 'click', function (event) {
+            event.preventDefault();
+            console.log("add running...");
+            let form = $('#add-form')[0];
+            let formData = new FormData(form);
+            $.ajax({
+                type: 'POST',
+                url: 'http://localhost:8080/api/blogs',
+                enctype: 'multipart/form-data',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success : function() {
+                    $("#msg").html( "<span style='color: green'>Blog added successfully</span>" );
+                      window.setTimeout(function(){location.reload()},1000)
+                },
+                error: function() {
+                    $("#msg").html( "<span style='color: red'>Create blog error</span>" );
+                }
+            });
+        })
+
+        // function addBlog(event) {
+        //     event.preventDefault();
+        //     console.log("add running...");
+        //     let form = document.getElementById('add');
+        //     let fromData = new FormData(form);
+        //     console.log("formData"+fromData);
+        //     console.log("form"+form);
+        // }
     </script>
 </head>
 <body>
    <div class="container">
     <h2>Blog Spring Boot</h2>
-    <p><a class="btn" href="#add" rel="modal:open">Add New Blog</a></p>
+    <p><a class="btn btn-primary" href="#add" data-target="#add" data-toggle="modal" rel="modal:open">Add New Blog</a></p>
     <table class="table">
         <thead>
             <tr>
             <th scope="col">#</th>
             <th scope="col">Title</th>
             <th scope="col">Content</th>
-            <th scope="col">Cover</th>
+            <th scope="col" colspan="3">Cover</th>
             <th scope="col">Category</th>
             <!-- <th scope="col">Author</th> -->
             </tr>
         </thead>
     </table>
 
-    <form id="add" action="#" class="add_form modal" style="display: none;">
+    <form id="add" class="add_form modal" tabindex="-1" style="display: none;">
         <h3>Add a New Blog</h3>
         <p>
             <label>Title</label>
@@ -89,18 +129,15 @@
             <label>Cover</label>
             <input type="file" multiple id="files" name="files">
         </p>
-        <p>
-            <label>Cover</label>
-            <input type="file" multiple id="files" name="files">
-        </p>
 
         <p>
             <label>Category</label>
             <select name="category" id="category">
-                <option value="1">Hai</option>
-                <option value="2">Hanh dong</option>
             </select>
         </p>
+        <p>
+            <input type="submit" id="addNew" value="Submit">
+          </p>
     </form>
    </div>
 </body>
