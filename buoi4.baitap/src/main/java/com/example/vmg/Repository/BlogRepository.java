@@ -12,11 +12,10 @@ import java.util.Optional;
 @Repository
 public interface BlogRepository extends JpaRepository<Blog, Long>{
 
-    List<Blog> findAllByAuthor(String author);
 
     List<Blog> findAllByTitleContainingIgnoreCase(String title);
 
-    List<Blog> findAllByAuthor_Name(String author);
+    List<Blog> findAllByUser_Fullname(String author);
 
     List<Blog> findAllByCategory_Name(String category);
 }

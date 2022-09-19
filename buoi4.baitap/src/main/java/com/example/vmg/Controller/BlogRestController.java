@@ -1,13 +1,11 @@
 package com.example.vmg.Controller;
 
 import com.example.vmg.exception.NoDataFoundException;
-import com.example.vmg.model.Blog;
-import com.example.vmg.model.BlogForm;
-import com.example.vmg.model.Category;
-import com.example.vmg.model.Cover;
+import com.example.vmg.model.*;
 import com.example.vmg.service.BlogService;
 import com.example.vmg.service.CategoryService;
 import com.example.vmg.service.CoverService;
+import com.example.vmg.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
@@ -38,6 +36,9 @@ public class BlogRestController {
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private MessageSource messageSource;
@@ -135,6 +136,14 @@ public class BlogRestController {
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @PostMapping("/users")
+    public ResponseEntity<User> register(@ModelAttribute User user) {
+        System.out.println("register running ...");
+        if (userService.register(user) != null)
+            return new ResponseEntity<>(user, HttpStatus.CREATED);
+        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
     }
 
     private void addFile(List<MultipartFile> files, Blog blog) {

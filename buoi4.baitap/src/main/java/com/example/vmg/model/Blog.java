@@ -34,8 +34,8 @@ public class Blog {
     private Set<Cover> covers;
 
     @ManyToOne
-    @JoinColumn(name = "author_id")
-    private Author author;
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Transient
     private List<MultipartFile> files;
@@ -102,12 +102,12 @@ public class Blog {
         this.covers = covers;
     }
 
-    public Author getAuthor() {
-        return author;
+    public User getUser() {
+        return this.user;
     }
 
-    public void setAuthor(Author author) {
-        this.author = author;
+    public void setAuthor(User user) {
+        this.user = user;
     }
 
     public Blog(BlogBuilder blogBuilder) {

@@ -1,14 +1,11 @@
 package com.example.vmg.service;
 
-import com.example.vmg.Repository.AuthorRepository;
 import com.example.vmg.Repository.BlogRepository;
 import com.example.vmg.exception.BlogNotFoundException;
-import com.example.vmg.exception.NoDataFoundException;
 import com.example.vmg.model.Blog;
 import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -17,9 +14,6 @@ public class BlogService {
 
     @Autowired
     private BlogRepository blogRepository;
-
-    @Autowired
-    private AuthorRepository authorRepository;
 
     public List<Blog> getAll() {
 //        List<Blog> blogs = (List<Blog>) blogRepository.findAll();
@@ -62,7 +56,7 @@ public class BlogService {
     }
 
     public List<Blog> findBlogByAuthor(String author) {
-        return blogRepository.findAllByAuthor_Name(author);
+        return blogRepository.findAllByUser_Fullname(author);
     }
 
     public List<Blog> findBlogByCategory(String category) {

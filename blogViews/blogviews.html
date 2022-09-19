@@ -10,6 +10,49 @@
     <title>Document</title>
 
     <script>
+
+      function showBlogs(data) {
+        let tr="";
+        for (let i = 0; i < json.length; i++) {
+          // console.log(json[i].category.name);
+          tr += `<tr>
+              <td>${json[i].id}</td>
+              <td>${json[i].title}</td>
+              <td>${json[i].content}</td>
+              <td colspan='3'>`;
+              for (let j = 0; j < json[i].covers.length; j++) {
+                  tr += `<img width="50px" src='http://127.0.0.1:8080/image/${json[i].covers[j].name}'>`;
+              }
+              tr +=`</td><td>${json[i].category ? json[i].category.name : ""}</td>
+              <td><button class='edit'>Edit</button> <button class='delete' id='${json[i].id}'>Delete</button></td>
+              </tr>`;
+          } 
+          $('table').append($(tr));
+      };
+
+      $(document).delegate('#register', 'submit', function(event) {
+        event.preventDefault();
+        console.log('register running...');
+        let form = $('#register')[0];
+        let formData = new FormData(form);
+        console.log(formData);
+        $.ajax({
+          type: 'POST',
+          url: 'http://localhost:8080/api/users',
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function(result) {
+            localStorage.setItem("username", result.fullname);
+            localStorage.setItem("id", result.id);
+            $("#msg").html( "<span style='color: green'>register successfully</span>" );
+            window.setTimeout(function(){location.reload()},1000);
+          },
+          error: function() {
+            $("#msg").html( "<span style='color: red'>Create blog error</span>" );
+            },
+        });
+      });
         $(document).ready(function() {
             $.getJSON('http://localhost:8080/api/blogs', function (json) {
                 // console.log(json[0].category.name);
@@ -69,7 +112,7 @@
         $(document).delegate('#addNew', 'click', function (event) {
             event.preventDefault();
             console.log("add running...");
-            let form = $('#add-form')[0];
+            let form = $('#add')[0];
             let formData = new FormData(form);
             $.ajax({
                 type: 'POST',
@@ -102,6 +145,7 @@
    <div class="container">
     <h2>Blog Spring Boot</h2>
     <p><a class="btn btn-primary" href="#add" data-target="#add" data-toggle="modal" rel="modal:open">Add New Blog</a></p>
+    <p><a class="btn btn-primary" href="#register" data-target="#register" data-toggle="modal" rel="modal:open">Register</a></p>
     <table class="table">
         <thead>
             <tr>
@@ -114,31 +158,71 @@
             </tr>
         </thead>
     </table>
-
-    <form id="add" class="add_form modal" tabindex="-1" style="display: none;">
-        <h3>Add a New Blog</h3>
-        <p>
-            <label>Title</label>
-            <input type="text" id="title" name="title">
-        </p>
-        <p>
-            <label>Content</label>
-            <input type="text" id="content" name="content">
-        </p>
-        <p>
-            <label>Cover</label>
-            <input type="file" multiple id="files" name="files">
-        </p>
-
-        <p>
-            <label>Category</label>
-            <select name="category" id="category">
-            </select>
-        </p>
-        <p>
-            <input type="submit" id="addNew" value="Submit">
-          </p>
-    </form>
    </div>
+
+   <div class="container">
+    <div class="row text-center">
+      <div class="col-4"></div>
+      <div class="col-4">
+          <form id="register" class=" modal modal-lg text-center" tabindex="-1" style="display: none;margin: 0 auto ;height: 80%;">
+            <h3>Register</h3>
+            <p>
+                <label>username</label>
+                <input type="text" id="username" name="username">
+            </p>
+            <p>
+                <label>full name</label>
+                <input type="text" id="fullname" name="fullname">
+            </p>
+            <p>
+                <label>Password</label>
+                <input type="password" id="password" name="password">
+            </p>
+            <div class="modal-footer text-center">
+              <button type="submit" class="btn btn-primary">Register</button>
+            </div>
+        </form>
+      </div>
+      
+      <div class="col-4"></div>
+  </div>
+   </div>
+   <div class="container">
+    <div class="row text-center">
+        <div class="col-4"></div>
+        <div class="col-4">
+            <form id="add" class=" modal modal-lg text-center" tabindex="-1" style="display: none;margin: 0 auto ;height: 80%;">
+                <h3>Add a New Blog</h3>
+                <p>
+                    <label>Title</label>
+                    <input type="text" id="title" name="title">
+                </p>
+                <p>
+                    <label>Content</label>
+                    <input type="text" id="content" name="content">
+                </p>
+                <p>
+                    <label>Cover</label>
+                    <input type="file" multiple id="files" name="files">
+                </p>
+        
+                <p>
+                    <label>Category</label>
+                    <select name="category" id="category">
+                    </select>
+                </p>
+                <div class="modal-footer text-center">
+                    
+                    <button type="button" class="btn btn-primary">Send message</button>
+                </div>
+            </form>
+        </div>
+        
+        <div class="col-4"></div>
+    </div>
+    
+   </div>
+   
+   
 </body>
 </html>
