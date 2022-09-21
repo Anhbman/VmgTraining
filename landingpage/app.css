@@ -2,6 +2,7 @@ body {
     margin: 0px;
     color: #212529;
     box-sizing: border-box;
+    font-size: 16px;
 }
 
 .header {
@@ -176,6 +177,9 @@ svg {
 .content-3 {
     background-color: #f3f2ef;
     height: 92px;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
 }
 
 .number-process {
@@ -185,4 +189,137 @@ svg {
     justify-content: center;
     height: 36px;
     padding: 8px 12px;
+    font-weight: 700;
+    font-size: larger;
+}
+
+.number {
+    width: 36px;
+    height: 36px;
+    background-color: #fff;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    border-radius: 50%;
+    margin-right: 8px;
+    color: #0a8543;;
+}
+
+.number-active .number {
+    background-color: #0a8543;
+    color: #fff;
+}
+
+.number-active .text-process {
+    color: #0a8543;
+}
+
+.content-4 {
+    background-color: #f3f2ef;
+}
+
+.card-plans {
+    background-color: #fff;
+    height: 100%;
+    border-radius: 0.5rem;
+    padding: 30px;
+    box-shadow: 0 0 0 0.0625rem var(--color-grey-07),0 0.3125rem 0.625rem 0 rgba(0,0,0,.05);
+}
+
+.text-card-plans-content {
+    text-align: center;
+    font-size: 1.5rem;
+    color: #000;
+    font-weight: 600;
+}
+
+.card-content-header {
+    text-align: center;
+}
+
+.sale-card-plans-content {
+    position: relative;
+    font-size: 20px;
+    font-weight: 500;
+    color: #6b6c72;
+    margin-top: 8px;
+}
+
+.sale-card-plans-content::after{
+    content: "";
+    position: absolute;
+    top: 0.875rem;
+    left: 0;
+    right: 0;
+    height: 0.0625rem;
+    background-color: #6b6c72;
+}
+
+.price-card-plans-content {
+    color: #000;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    margin: 0;
+    justify-content: center;
+}
+
+.logo-price-card-plans {
+    font-size: 1rem;
+    line-height: 1.5rem;
+}
+
+.number-price-card-plans {
+    font-size: 2.125rem;
+    line-height: 2.75rem;
+}
+
+.sub-price-card-plans {
+    font-size: 1rem;
+    line-height: 1.5rem;
+}
+
+.month-price-card-plans {
+    font-size: 1rem;
+    line-height: 1rem;
+}
+
+.description-card-plans-content {
+    margin-top: 16px;
+    margin-bottom: 10px;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    font-weight: 500;
+}
+
+.btn-card-plans-content {
+    margin-top: 20px;
+    width: 100%;
+    background-color: #0a8543;
+    border-radius: 0.25rem;
+    color: #fff;
+    height: 3.25rem;
+    font-style: normal;
+    border: none;
+}
+
+.btn-card-plans-content:hover {
+    background-color: #086d37;
+    color: #fff !important;
+}
+
+.items-card-plans-content {
+    margin-top: 8px;
+    position: relative;
+    color: #393a3d;
+    height: auto;
+    line-height: 1.43;
+    list-style-type: none;
+    padding-bottom: 0.5rem;
+    text-decoration: underline;
+    display: inline-grid;
+}
+
+.text-items-card-plans {
+    padding-top: 0.75rem;
 }
