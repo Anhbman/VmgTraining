@@ -1,0 +1,30 @@
+<html>
+<head>
+    <script src=
+"https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js">
+      </script>
+</head>
+<body>
+    <div id='parent'>
+        <h1 style="color: green;">
+          GeeksforGeeks
+          </h1>
+        <strong>Sex : </strong>
+        <input type="radio" id="m" value="male"
+               v-model="sex">
+        <label for="male">Male</label>
+        <input type="radio" id="f" value="female"
+               v-model="sex">
+        <label for="female">Female</label>
+        <input type="radio" id="b" value="bi-sexual"
+               v-model="sex">
+        <label for="bi-sexual">Bisexual</label>
+         
+ 
+<p><strong>Your Sex: </strong>{{ sex }}</p>
+ 
+ 
+    </div>
+    <script src='app2.js'></script>
+</body>
+</html>
