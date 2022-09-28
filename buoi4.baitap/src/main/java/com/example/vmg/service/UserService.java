@@ -55,15 +55,16 @@ public class UserService implements UserDetailsService {
 
         if (roleList != null) {
             for (Role role : roleList) {
-                GrantedAuthority authority = new SimpleGrantedAuthority(role.getName());
+                GrantedAuthority authority = new SimpleGrantedAuthority(role.getName().name());
                 authorities.add(authority);
             }
         }
 
-        return new org.springframework.security.core.userdetails.User(
-                user.getUsername(),
-                user.getPassword(),
-                authorities
-        );
+//        return new org.springframework.security.core.userdetails.User(
+//                user.getUsername(),
+//                user.getPassword(),
+//                authorities
+//        );
+        return UserDetailsImpl.build(user);
     }
 }

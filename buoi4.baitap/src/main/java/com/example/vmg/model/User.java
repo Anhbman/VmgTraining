@@ -5,6 +5,7 @@ import lombok.Data;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -26,6 +27,19 @@ public class User {
     @NotNull(message = "fullname cannot null")
     private String fullname;
 
-    @ManyToMany
-    private Set<Role> role;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(	name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
+
+    public User(String username, String password, String fullname) {
+        this.username = username;
+        this.password = password;
+        this.fullname = fullname;
+    }
+
+    public User() {
+
+    }
 }
