@@ -97,7 +97,7 @@ public class BlogRestController {
     public ResponseEntity<Blog> createBlog(@ModelAttribute BlogForm blogForm,
                                            BindingResult result) {
         System.out.println("add blog running...");
-        System.out.println(blogForm.getCategory());
+        System.out.println(blogForm.getContent());
         Category category = categoryService.getCategory(blogForm.getCategory().getId());
         System.out.println(category.getName());
         blogForm.setCategory(category);
@@ -131,6 +131,7 @@ public class BlogRestController {
     @DeleteMapping("/blogs/{id}")
     public ResponseEntity<HttpStatus> deleteBlog(@PathVariable("id") long id) {
         try {
+            System.out.println("id: " + id);
             blogService.delete(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
