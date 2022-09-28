@@ -9,7 +9,7 @@
                     <th scope="col">Content</th>
                     <th scope="col" colspan="2">Cover</th>
                     <th scope="col">Category</th>
-                <!-- <th scope="col">Author</th> -->
+                    <th scope="col"></th>
                 </tr>
             </thead>
             <tbody v-for="(blog, index) in blogs" :key="blog.id">
@@ -23,6 +23,11 @@
                          width="50px">
                     </td>
                     <td>{{blog.category ? blog.category.name : ''}}</td>
+                    <td>
+                        <a class="badge badge-warning btn btn-info" :href="'/blog/' + blog.id">Edit</a>
+                        <button class="btn btn-warning" @click="deleteBlog(blog.id)">Delete</button>
+                        <!-- <a class="badge badge-warning btn btn-warning" :href="'/blog/' + blog.id">Edit</a> -->
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -41,15 +46,26 @@ export default {
         }
     },
     methods: {
-        getBlogs() {
-            Blog.getBlogs()
+        getAllBlogs() {
+            Blog.getAll()
                 .then(response => {
                     console.log('getData blogs');
                     this.blogs = response.data
-                    this.blogs.forEach(item => {
-                        console.log(item);
-                    })
+                    // this.blogs.forEach(item => {
+                    //     console.log(item);
+                    // })
+                    // console.log(this.blogs);
                     return this.blogs;
+                })
+                .catch(e => {
+                    console.log(e);
+                })
+        },
+        deleteBlog(id) {
+            Blog.delete(id)
+                .then(response => {
+                    console.log(response.data);
+                    window.location.reload();
                 })
                 .catch(e => {
                     console.log(e);
@@ -57,7 +73,7 @@ export default {
         }
     },
     created() {
-        this.getBlogs();
+        this.getAllBlogs();
     },
 }
 

@@ -3,12 +3,25 @@
 import Vue from 'vue'
 import App from './App'
 import 'bootstrap/dist/css/bootstrap.min.css'
+import router from './router'
+import ElementUI from 'element-ui'
+import locale from 'element-ui/lib/locale/lang/en'
+import 'element-ui/lib/theme-chalk/index.css';
+
+Vue.use(ElementUI, { locale })
 
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
+// new Vue({
+//   el: '#app',
+//   router,
+//   // components: { App },
+
+//   template: '<App/>'
+// })
+
 new Vue({
-  el: '#app',
-  components: { App },
-  template: '<App/>'
-})
+  router,
+  render: h => h(App),
+}).$mount('#app')
