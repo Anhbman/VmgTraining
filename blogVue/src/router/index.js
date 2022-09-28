@@ -1,5 +1,9 @@
 import Vue from "vue";
 import Router from "vue-router";
+import blog from "@/components/Blog.vue"
+import addBlog from "@/components/AddBlog.vue"
+import editBlog from "@/components/EditBlog.vue"
+import login from "@/components/Login.vue"
 
 Vue.use(Router);
 
@@ -10,19 +14,24 @@ export default new Router ({
             path: '/',
             alias: '/blogs',
             name: 'blogs',
-            component: () => import('./components/Blog.vue'),
+            component: blog,
         },
         {
-            path: '/blog/',
+            path: '/add',
             alias: '/add-blog',
             name: 'add-blog',
-            component: () => import('./components/AddBlog.vue'),
+            component: addBlog,
         },
         {
             path: '/blog/:id',
             alias: '/edit-blog',
             name: 'edit-blog',
-            component: () => import('./components/EditBlog.vue'),
+            component: editBlog,
+        },
+        {
+            path: '/login',
+            name: 'login',
+            component: login,
         }
     ]
 });

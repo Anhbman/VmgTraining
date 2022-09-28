@@ -65,7 +65,7 @@ export default {
             Blog.delete(id)
                 .then(response => {
                     console.log(response.data);
-                    window.location.reload();
+                    this.getAllBlogs();
                 })
                 .catch(e => {
                     console.log(e);

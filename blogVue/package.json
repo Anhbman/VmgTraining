@@ -10,12 +10,18 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.2.0",
+    "@fortawesome/free-solid-svg-icons": "^6.2.0",
+    "@fortawesome/vue-fontawesome": "^2.0.8",
     "@popperjs/core": "^2.11.6",
     "async_hooks": "^1.0.0",
     "axios": "^0.27.2",
     "bootstrap": "^5.2.1",
     "element-ui": "^2.15.10",
+    "jquery": "^3.6.1",
+    "popper.js": "^1.16.1",
     "save": "^2.9.0",
+    "vee-validate": "^2.2.15",
     "vue": "^2.5.2",
     "vue-router": "^3.6.5",
     "vuex": "^3.6.2"

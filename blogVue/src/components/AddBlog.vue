@@ -19,7 +19,7 @@
                     <option  v-for="(item) in cate" :key="item.id" :value="item.id">{{item.name}}</option>
                 </select>
             </div>
-            <button class="btn btn-success" v-on:click.prevent="saveBlog($event)">Save</button>
+            <button class="btn btn-success" v-on:click.prevent="saveBlog()">Save</button>
         </form>
     </div>
 </template>
@@ -44,7 +44,7 @@ export default {
         };
     },
     methods: {
-        saveBlog(event) {
+        saveBlog() {
             let form = document.getElementById('add-blog');
             let formData = new FormData(form);
             console.log(formData);
@@ -74,6 +74,7 @@ export default {
         // }
     },
     mounted() {
+        console.log('add blog running...');
         this.getCategories();
     }
 }
