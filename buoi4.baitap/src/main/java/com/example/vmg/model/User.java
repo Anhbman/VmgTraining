@@ -1,6 +1,9 @@
 package com.example.vmg.model;
 
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -10,6 +13,8 @@ import java.util.Set;
 
 @Entity
 @Data
+@Setter(AccessLevel.PUBLIC)
+@Getter(AccessLevel.PUBLIC)
 public class User {
 
     @Id

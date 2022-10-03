@@ -1,7 +1,10 @@
 package com.example.vmg.Repository;
 
 import com.example.vmg.model.Blog;
+import com.example.vmg.model.Category;
 import com.example.vmg.model.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -13,8 +16,12 @@ import java.util.Optional;
 @Repository
 public interface BlogRepository extends JpaRepository<Blog, Long>{
 
+    @Override
+    Page<Blog> findAll(Pageable pageable);
 
-    List<Blog> findAllByTitleContainingIgnoreCase(String title);
+    Page<Blog> findAllByTitleContainingIgnoreCaseOrderByCreatedDate(Pageable pageable, String title);
+
+    Page<Blog> findAllByCategory_NameOrderByCreatedDate(Pageable pageable, String category);
 
     List<Blog> findAllByUser_Fullname(String author);
 

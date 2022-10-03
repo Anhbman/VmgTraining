@@ -3,8 +3,11 @@ package com.example.vmg.service;
 import com.example.vmg.Repository.BlogRepository;
 import com.example.vmg.exception.BlogNotFoundException;
 import com.example.vmg.model.Blog;
+import com.example.vmg.model.Category;
 import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,12 +19,15 @@ public class BlogService {
     private BlogRepository blogRepository;
 
     public List<Blog> getAll() {
-//        List<Blog> blogs = (List<Blog>) blogRepository.findAll();
-//        if (blogs.isEmpty()) {
-//            throw new NoDataFoundException();
-//        }
-//        return blogs;
         return blogRepository.findAll();
+    }
+
+    public Page<Blog> getAll(Pageable pageable) {
+        return blogRepository.findAll(pageable);
+    }
+
+    public Page<Blog> getBlogByTitle(Pageable pageable, String title) {
+        return blogRepository.findAllByTitleContainingIgnoreCaseOrderByCreatedDate(pageable, title);
     }
 
     public Blog add(Blog blog) {
@@ -59,11 +65,7 @@ public class BlogService {
         return blogRepository.findAllByUser_Fullname(author);
     }
 
-    public List<Blog> findBlogByCategory(String category) {
-        return blogRepository.findAllByCategory_Name(category);
-    }
-
-    public List<Blog> findBlogByTitle(String title) {
-        return blogRepository.findAllByTitleContainingIgnoreCase(title);
+    public Page<Blog> findBlogByCategory(Pageable pageable, String category) {
+        return blogRepository.findAllByCategory_NameOrderByCreatedDate(pageable, category);
     }
 }

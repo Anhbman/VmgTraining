@@ -9,7 +9,12 @@ import com.example.vmg.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
+import org.springframework.data.convert.ReadingConverter;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
@@ -21,11 +26,14 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/api")
+@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
 public class BlogRestController {
 
     @Autowired
@@ -56,25 +64,33 @@ public class BlogRestController {
     }
 
     @GetMapping("/blogs")
-    public ResponseEntity<List<Blog>> getBlogList(@RequestParam(value = "title", required = false) String title,
+    public ResponseEntity<Map<String, Object>> getBlogList(@RequestParam(value = "title", required = false) String title,
                                                   @RequestParam(value = "author", required = false) String author,
-                                                  @RequestParam(value = "category", required = false) String category) {
+                                                  @RequestParam(value = "category", required = false) String category,
+                                                  @RequestParam(value = "page", defaultValue = "0") int page,
+                                                  @RequestParam(value = "size", defaultValue = "5") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<Blog> blogPage;
         List<Blog> blog = new ArrayList<>();
         int i = 0;
         System.out.println("check" + author == null);
         if (title == null && author == null && category == null) {
             i = 1;
-            blogService.getAll().forEach(blog::add);
+            blogPage = blogService.getAll(pageable);
         } else if (title != null && author == null && category == null) {
             i = 2;
-            blogService.findBlogByTitle(title).forEach(blog::add);
+            blogPage = blogService.getBlogByTitle(pageable, title);
         } else if (title == null && author != null && category == null){
+            blogPage = blogService.getAll(pageable);
             i = 3;
             blogService.findBlogByAuthor(author).forEach(blog::add);
         } else {
             i = 4;
-            blogService.findBlogByCategory(category).forEach(blog::add);
+            blogPage = blogService.findBlogByCategory(pageable, category);
         }
+
+        blogPage.getContent().forEach(blog::add);
 
         if (blog.isEmpty()) {
             if (i == 2)
@@ -85,7 +101,14 @@ public class BlogRestController {
                 throw new NoDataFoundException("Category");
             }
         }
-        return new ResponseEntity<>(blog, HttpStatus.OK);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("blogs", blog);
+        response.put("currentPage", blogPage.getNumber());
+        response.put("totalItems", blogPage.getTotalElements());
+        response.put("totalPage", blogPage.getTotalPages());
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/blogs/{id}")

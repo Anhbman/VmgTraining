@@ -15,7 +15,7 @@ public class SignupRequest {
     @NotNull(message = "password cannot null")
     private String password;
 
-    @NotNull(message = "Role cannot null")
+//    @NotNull(message = "Role cannot null")
     private List<String> roles;
 
     public List<String> getRoles() {
