@@ -1,20 +1,31 @@
 import http from "../http-common";
+import authHeader from "./auth-header";
 
 // const BLOG_API_BASE_URL = 'http://localhost:8080/api/blogs'
+var user = JSON.parse(localStorage.getItem('user'));
 
 class BlogService {
-    getAll() {
-        return http.get('/blogs');
+
+    getAll(page = 0) {
+        return http.get('/blogs', {
+            params: {
+                page: page
+            },
+            headers: authHeader()
+        });
     }
 
     getById(id) {
-        return http.get(`/blogs/${id}`);
+        return http.get(`/blogs/${id}`, {
+            headers: authHeader()
+        });
     }
 
     create(data) {
         return http.post('/blogs', data, {
             headers: {
                 "Content-Type": "multipart/form-data",
+                "Authorization": `Bearer ${user.token}`
             }
         });
     }
@@ -24,15 +35,22 @@ class BlogService {
     }
 
     delete(id) {
-        return http.delete(`/blogs/${id}`);
+        return http.delete(`/blogs/${id}`, {
+            headers: authHeader()
+        });
     }
 
     findByTitle(title) {
-        return http.get(`/blogs?title=${title}`);
+        return http.get(`/blogs?title=${title}`, {
+            headers: authHeader()
+        });
     }
 
     findByAuthor(author) {
-        return http.get(`/blogs?author=${author}`);
+        return http.get(`/blogs?author=${author}`, {
+            headers: authHeader(
+            )
+        });
     }
 }
 

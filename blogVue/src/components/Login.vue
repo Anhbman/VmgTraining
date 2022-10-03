@@ -9,14 +9,13 @@
       </el-form-item>
       <el-form-item>
       <el-button type="primary" @click="submitForm('ruleForm')">Login</el-button>
-      <!-- <el-button @click="resetForm('ruleForm')">Reset</el-button> -->
       </el-form-item>
     </el-form>
   </div>
 </template>
   <script>
 
-    import AuthSerivce from '../services/AuthService'
+    import User from '../models/user';
 
     export default {
       name: 'login',
@@ -41,6 +40,9 @@
           }
         };
         return {
+          user: new User('',''),
+          loading: false,
+          message:'',
           ruleForm: {
             password: '',
             username: ''
@@ -57,32 +59,50 @@
       },
       methods: {
         submitForm(formName) {
-          console.log('submit running');
-          // console.log(this.$refs[formName].validate);
+        console.log('submit running');
         this.$refs[formName].validate((valid) => {
           console.log(valid);
           if (valid) {
-            // alert('submit!');
-            // let form = document.getElementById('form-login');
-            // let formdata = new FormData(form);
-            // console.log(formdata);
-            // const fields = JSON.stringify(this.$refs.ruleForm.fields)
-            console.log(this.ruleForm);
-            AuthSerivce.login(this.ruleForm)
-              .then(result => {
-                console.log(result);
-              })
-              .catch(e => {
-                console.log(e);
-              })
+            this.user.username = this.ruleForm.username;
+            this.user.password = this.ruleForm.password;
+
+            this.$store.dispatch('auth/login', this.user).then(
+              () => {
+                this.$router.push('/profile');
+              },
+              error => {
+                this.loading = false;
+                this.message = 
+                (error.response && error.response.data) ||
+                error.message ||
+                error.toString();
+              }
+            )
+
+            // console.log(this.ruleForm);
+            // AuthSerivce.login(this.ruleForm)
+            //   .then(result => {
+            //     console.log(result);
+            //   })
+            //   .catch(e => {
+            //     console.log(e);
+            //   })
           } else {
             console.log('error submit!!');
+            this.loading = false;
             return false;
           }
         });
       },
-        resetForm(formName) {
-          this.$refs[formName].resetFields();
+      },
+      computed: {
+        loggedIn() {
+          return this.$store.state.auth.status.loggedIn;
+        }
+      },
+      created() {
+        if (this.loggedIn) {
+          this.$router.push('/profile');
         }
       }
     }

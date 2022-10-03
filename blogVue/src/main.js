@@ -3,10 +3,10 @@
 import Vue from 'vue'
 import App from './App'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import 'bootstrap'
+// import 'bootstrap'
 import store from './store'
-import VeeValidate from 'vee-validate'
-import router from './router/index.js'
+import VeeValidate from 'vee-validate';
+import {router} from './router'
 import ElementUI from 'element-ui'
 import locale from 'element-ui/lib/locale/lang/en'
 import 'element-ui/lib/theme-chalk/index.css'
@@ -27,15 +27,6 @@ Vue.use(ElementUI, { locale })
 Vue.use(VeeValidate)
 
 Vue.config.productionTip = false
-
-/* eslint-disable no-new */
-// new Vue({
-//   el: '#app',
-//   router,
-//   // components: { App },
-
-//   template: '<App/>'
-// })
 
 new Vue({
   router,

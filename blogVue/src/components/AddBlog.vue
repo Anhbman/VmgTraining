@@ -50,8 +50,8 @@ export default {
             console.log(formData);
             Blog.create(formData)
                 .then(response => {
-                    console.log(response.data);
                     this.submitted = true;
+                    this.$router.push('/');
                 })
                 .catch(e => {
                     console.log(e);

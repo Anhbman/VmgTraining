@@ -23,11 +23,13 @@ class AuthService {
     }
 
     register(user) {
+        console.log('register: ' + user.username);
         return axios.post(API_URL + 'signup', {
             username: user.username,
+            fullname: user.fullname,
             password: user.password
         })
     }
 }
 
-export default AuthService();
+export default new AuthService();

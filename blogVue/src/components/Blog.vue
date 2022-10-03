@@ -26,55 +26,58 @@
                     <td>
                         <a class="badge badge-warning btn btn-info" :href="'/blog/' + blog.id">Edit</a>
                         <button class="btn btn-warning" @click="deleteBlog(blog.id)">Delete</button>
-                        <!-- <a class="badge badge-warning btn btn-warning" :href="'/blog/' + blog.id">Edit</a> -->
                     </td>
                 </tr>
             </tbody>
         </table>
+        <pagination :dataPagination="dataPagination" v-on:clickPagination="onPaginationClick"></pagination>
     </div>
 </template>
 
 <script>
 
 import Blog from '../services/Blog';
+import Pagination from './Pagination.vue';
 
 export default {
-    name: 'Blogs',
+    name: "Blogs",
     data() {
         return {
             blogs: [],
-        }
+            dataPagination: null,
+            currentPage: 1,
+        };
     },
     methods: {
-        getAllBlogs() {
-            Blog.getAll()
+        getAllBlogs(page = 0) {
+            Blog.getAll(page)
                 .then(response => {
-                    console.log('getData blogs');
-                    this.blogs = response.data
-                    // this.blogs.forEach(item => {
-                    //     console.log(item);
-                    // })
-                    // console.log(this.blogs);
-                    return this.blogs;
-                })
+                this.blogs = response.data.blogs;
+                this.dataPagination = response.data;
+                return this.blogs;
+            })
                 .catch(e => {
-                    console.log(e);
-                })
+                console.log(e);
+            });
         },
         deleteBlog(id) {
             Blog.delete(id)
                 .then(response => {
-                    console.log(response.data);
-                    this.getAllBlogs();
-                })
+                this.getAllBlogs();
+            })
                 .catch(e => {
-                    console.log(e);
-                })
+                console.log(e);
+            });
+        },
+        onPaginationClick(val) {
+            this.currentPage = val - 1;
+            this.getAllBlogs(this.currentPage);
         }
     },
     created() {
         this.getAllBlogs();
     },
+    components: { Pagination }
 }
 
 </script>

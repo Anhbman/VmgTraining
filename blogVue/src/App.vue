@@ -9,27 +9,55 @@
         <li class="nav-item">
           <router-link to="/add" class="nav-link">Add</router-link>
         </li>
-        <li class="nav-item right">
-          <router-link class="nav-link" to="/login">Login</router-link>
+      </div>
+      <div v-if="!currentUser" class="navbar-nav my-2 ml-auto">
+        <li class="nav-item">
+          <router-link to="/register" class="nav-link">
+            <font-awesome-icon icon="user-plus" />Sign Up
+          </router-link>
+        </li>
+        <li class="nav-item">
+          <router-link to="/login" class="nav-link">
+            <font-awesome-icon icon="sign-in-alt" />Login
+          </router-link>
+        </li>
+      </div>
+      <div v-if="currentUser" class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <router-link to="/profile" class="nav-link">
+            <font-awesome-icon icon="user" />
+            {{ currentUser.username }}
+          </router-link>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href @click.prevent="logOut">
+            <font-awesome-icon icon="sign-out-alt" />LogOut
+          </a>
         </li>
       </div>
     </nav>
     <div class="container mt3">
       <router-view></router-view>
     </div>
-    <!-- <blog></blog> -->
   </div>
 </template>
 
 <script>
 
-import Blog from './components/Blog.vue';
-
 export default {
   name: 'App',
-  components: {
-    Blog,
-  }
+  computed: {
+    currentUser() {
+      console.log(this.$store.state.auth.user == null);
+      return this.$store.state.auth.user;
+    }
+  },  
+  methods: {
+    logOut() {
+      this.$store.dispatch('auth/logout');
+      this.$router.push('/login');
+    }
+  },
 }
 </script>
 
