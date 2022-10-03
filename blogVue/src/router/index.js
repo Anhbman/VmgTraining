@@ -18,7 +18,7 @@ export const router = new Router ({
             path: '/',
             alias: '/blogs',
             name: 'blogs',
-            component: blog,
+            component: listBlog,
         },
         {
             path: '/home',

@@ -1,6 +1,6 @@
 <template>
   <div>
-  <el-table
+    <el-table
     :data="tableData"
     style="width: 100%">
     <el-table-column
@@ -32,12 +32,17 @@
     </el-table-column>
     <el-table-column
       align="right">
-      <template slot="header" slot-scope="">
-        <el-input
-          v-model="search"
-          size="mini"
-          placeholder="Type to search">
-          </el-input>
+      <template slot="header" slot-scope="scope">
+        <Dropdown 
+          :dataDropdown="dataDrop"
+          v-on:clickDropdown="handleCategory"
+          ></Dropdown>
+        <el-input 
+        placeholder="Please input" 
+        v-model="search"
+        size="small"
+        @input="handleInputSearch"
+        ></el-input>
       </template>
       <template slot-scope="scope">
         <el-button
@@ -58,15 +63,25 @@
 <script>
 
   import Blog from '../services/Blog';
+  import category from '../services/category';
   import pagination from './Pagination.vue';
+  import Dropdown from './Dropdown.vue';
+  import Category from '../models/category';
 
   export default {
+    // name: 'paginations',
     data() {
       return {
         tableData: [],
-        search: 'jjh',
-        dataPagination: null,
+        search: '',
+        dataPagination: {},
         currentPage: 1,
+        input: '',
+        dataDrop: {
+          title: 'Category',
+          data: [],
+        },
+        selectedCategory: '',
       }
     },
     methods: {
@@ -95,15 +110,59 @@
         });
       },
       onPaginationClick(val) {
+        console.log('search: ' + this.search);
+        console.log('selectedCategory: ' + this.selectedCategory);
         this.currentPage = val - 1;
-        this.getAllBlogs(this.currentPage);
+        if (this.search) {
+          this.handleInputSearch(this.search, this.currentPage);
+        } else if (this.selectedCategory) {
+          this.handleCategory(this.selectedCategory, this.currentPage);
+        } else {
+          this.getAllBlogs(this.currentPage);
+        }
+      },
+      handleInputSearch(val, page) {
+        this.search = val;
+        Blog.getBlogSearchTitle(val, page)
+          .then(result => {
+            console.log('title: ' + this.search);
+            this.tableData = result.data.blogs;
+            this.dataPagination = result.data;
+          })
+          .catch(error => {
+            console.log(error);
+          })
+      },
+      getCategories() {
+        category.getAll()
+          .then(result => {
+            this.dataDrop.data = result.data;
+          })
+          .catch (error => {
+            console.log(error);
+          })
+      },
+      handleCategory(val, page) {
+        this.selectedCategory = val;
+        console.log('category: ' + this.selectedCategory);
+        Blog.getBlogByCategory(this.selectedCategory, page)
+          .then ( result => {
+            this.tableData = result.data.blogs;
+            this.dataPagination = result.data;
+          })
+          .catch(error => {
+            console.log(error);
+          })
+        console.log(this.selectedCategory);
       }
     },
     components: {
-      pagination,
-    },
+    pagination,
+    Dropdown
+},
     created() {
       this.getAllBlogs();
-    }
+      this.getCategories();
+    },
   }
 </script>

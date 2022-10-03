@@ -15,6 +15,27 @@ class BlogService {
         });
     }
 
+    getBlogSearchTitle(title, page = 0) {
+        console.log('getBlogSearchTitle...');
+        return http.get('/blogs', {
+            params: {
+                page: page,
+                title: title,
+            },
+            headers: authHeader(),
+        })
+    }
+
+    getBlogByCategory(category, page = 0) {
+        return http.get('/blogs', {
+            params: {
+                category,
+                page,
+            },
+            headers: authHeader(),
+        })
+    }
+
     getById(id) {
         return http.get(`/blogs/${id}`, {
             headers: authHeader()

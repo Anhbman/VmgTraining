@@ -1,6 +1,7 @@
 <template>
   <div>
     <el-pagination
+      background
       :page-size="5"
       layout="prev, pager, next"
       @current-change="handleChangePagination"
