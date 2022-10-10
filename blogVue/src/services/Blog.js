@@ -51,8 +51,13 @@ class BlogService {
         });
     }
 
-    update(id, data) {
-        return http.put(`/blogs/${id}`, data);
+    update(data) {
+        return http.post(`/update`, data, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+                "Authorization": `Bearer ${user.token}`
+            }
+        });
     }
 
     delete(id) {

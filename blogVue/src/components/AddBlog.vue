@@ -68,10 +68,6 @@ export default {
                     this.cate = response.data;
                 })
         },
-        // handleUploadFile(event) {
-        //     console.log('Upload file' + event.target.files[0]);
-        //     this.blog.covers.push(event.target.files[0]);
-        // }
     },
     mounted() {
         console.log('add blog running...');

@@ -8,6 +8,7 @@ import register from "@/components/Register.vue"
 import profile from "@/components/Profile.vue"
 import boardUser from "@/components/BoardUser.vue"
 import listBlog from "@/components/ListBlog.vue"
+import updateBlog from "@/components/UpdateBlog.vue"
 
 Vue.use(Router);
 
@@ -31,7 +32,7 @@ export const router = new Router ({
             component: addBlog,
         },
         {
-            path: '/blog/:id',
+            path: '/blogs/:id',
             alias: '/edit-blog',
             name: 'edit-blog',
             component: editBlog,
@@ -52,6 +53,10 @@ export const router = new Router ({
         {
             path: '/user',
             component: boardUser,
+        },
+        {
+            path: '/update/:id',
+            component: updateBlog,
         }
     ]
 });

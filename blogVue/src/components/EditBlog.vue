@@ -35,10 +35,12 @@ export default {
         return {
             blog: null,
             cate: [],
+            id: 0,
         };
     },
     methods: {
         getBlogById(id) {
+            this.id = id;
             console.log('get blog by id');
             console.log(id);
             Blog.getById(id)
@@ -53,8 +55,9 @@ export default {
         saveBlog(event) {
             let form = document.getElementById('edit-blog');
             let formData = new FormData(form);
+            formData.append('id', this.id);
             console.log(formData);
-            Blog.create(formData)
+            Blog.update(formData)
                 .then(response => {
                     console.log(response.data);
                 })
@@ -63,7 +66,6 @@ export default {
                 })
         },
         getCategories() {
-            console.log('asdasdaw:' + id);
             category.getAll()
                 .then(response => {
                     this.cate = response.data;

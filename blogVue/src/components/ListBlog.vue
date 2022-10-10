@@ -86,7 +86,7 @@
     },
     methods: {
       handleEdit(index, row) {
-        console.log(index, row);
+        this.$router.push(`/update/${row.id}`);
       },
       handleDelete(index, row) {
         console.log(index, row);
@@ -110,8 +110,6 @@
         });
       },
       onPaginationClick(val) {
-        console.log('search: ' + this.search);
-        console.log('selectedCategory: ' + this.selectedCategory);
         this.currentPage = val - 1;
         if (this.search) {
           this.handleInputSearch(this.search, this.currentPage);
@@ -125,7 +123,6 @@
         this.search = val;
         Blog.getBlogSearchTitle(val, page)
           .then(result => {
-            console.log('title: ' + this.search);
             this.tableData = result.data.blogs;
             this.dataPagination = result.data;
           })
@@ -144,7 +141,6 @@
       },
       handleCategory(val, page) {
         this.selectedCategory = val;
-        console.log('category: ' + this.selectedCategory);
         Blog.getBlogByCategory(this.selectedCategory, page)
           .then ( result => {
             this.tableData = result.data.blogs;
@@ -153,7 +149,6 @@
           .catch(error => {
             console.log(error);
           })
-        console.log(this.selectedCategory);
       }
     },
     components: {
