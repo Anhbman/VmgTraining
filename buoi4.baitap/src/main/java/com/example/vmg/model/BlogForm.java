@@ -24,7 +24,6 @@ public class BlogForm {
 
     private Category category;
 
-    @NotEmpty(message = "file is mandatory")
     private List<MultipartFile> files;
 
     public BlogForm() {

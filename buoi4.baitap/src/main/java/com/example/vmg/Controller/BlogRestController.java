@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -149,6 +150,36 @@ public class BlogRestController {
         addFile(blogForm.getFiles(), blog);
 
         return new ResponseEntity<>(blog, HttpStatus.CREATED);
+    }
+
+    @PostMapping ("/update")
+    public ResponseEntity<Blog> updateBlog(@RequestPart BlogForm blogForm,
+                                           BindingResult result) {
+        System.out.println("update");
+        System.out.println(blogForm.getCategory());
+        if (result.hasErrors()) {
+            for (Object object : result.getAllErrors()) {
+                if (object instanceof FieldError) {
+                    FieldError fieldError = (FieldError) object;
+                    String message = messageSource.getMessage(fieldError, null);
+                    System.out.println(message);
+                }
+            }
+            return  new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+
+        Blog blog = blogService.getBlog(blogForm.getId());
+        blog.setTitle(blogForm.getTitle());
+        blog.setCategory(blogForm.getCategory());
+        System.out.println("file: " + blogForm.getFiles().size());
+        if (blogForm.getFiles().size() > 0) {
+            coverService.remove(blog);
+            addFile(blogForm.getFiles(), blog);
+        }
+        if (blogService.add(blog) != null) {
+            return new ResponseEntity<>(blog, HttpStatus.OK);
+        }
+        return  new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
     }
 
     @DeleteMapping("/blogs/{id}")
